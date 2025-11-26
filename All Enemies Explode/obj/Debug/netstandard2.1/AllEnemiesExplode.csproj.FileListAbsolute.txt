@@ -1,0 +1,22 @@
+C:\Users\katko\Desktop\Ror2 mods\All Enemies Explode 2\R2Boilerplate-master\All Enemies Explode\bin\Debug\netstandard2.1\AllEnemiesExplode.deps.json
+C:\Users\katko\Desktop\Ror2 mods\All Enemies Explode 2\R2Boilerplate-master\All Enemies Explode\bin\Debug\netstandard2.1\AllEnemiesExplode.dll
+C:\Users\katko\Desktop\Ror2 mods\All Enemies Explode 2\R2Boilerplate-master\All Enemies Explode\bin\Debug\netstandard2.1\AllEnemiesExplode.pdb
+C:\Users\katko\Desktop\Ror2 mods\All Enemies Explode 2\R2Boilerplate-master\All Enemies Explode\obj\Debug\netstandard2.1\AllEnemiesExplode.csproj.AssemblyReference.cache
+C:\Users\katko\Desktop\Ror2 mods\All Enemies Explode 2\R2Boilerplate-master\All Enemies Explode\obj\Debug\netstandard2.1\AllEnemiesExplode.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\katko\Desktop\Ror2 mods\All Enemies Explode 2\R2Boilerplate-master\All Enemies Explode\obj\Debug\netstandard2.1\AllEnemiesExplode.AssemblyInfoInputs.cache
+C:\Users\katko\Desktop\Ror2 mods\All Enemies Explode 2\R2Boilerplate-master\All Enemies Explode\obj\Debug\netstandard2.1\AllEnemiesExplode.AssemblyInfo.cs
+C:\Users\katko\Desktop\Ror2 mods\All Enemies Explode 2\R2Boilerplate-master\All Enemies Explode\obj\Debug\netstandard2.1\AllEnemiesExplode.csproj.CoreCompileInputs.cache
+C:\Users\katko\Desktop\Ror2 mods\All Enemies Explode 2\R2Boilerplate-master\All Enemies Explode\obj\Debug\netstandard2.1\AllEnemiesExplode.dll
+C:\Users\katko\Desktop\Ror2 mods\All Enemies Explode 2\R2Boilerplate-master\All Enemies Explode\obj\Debug\netstandard2.1\AllEnemiesExplode.pdb
+C:\Users\katko\Desktop\Ror2 mods\All Enemies Explode\R2Boilerplate-master\All Enemies Explode\bin\Debug\netstandard2.1\AllEnemiesExplode.deps.json
+C:\Users\katko\Desktop\Ror2 mods\All Enemies Explode\R2Boilerplate-master\All Enemies Explode\bin\Debug\netstandard2.1\AllEnemiesExplode.dll
+C:\Users\katko\Desktop\Ror2 mods\All Enemies Explode\R2Boilerplate-master\All Enemies Explode\bin\Debug\netstandard2.1\AllEnemiesExplode.pdb
+C:\Users\katko\Desktop\Ror2 mods\All Enemies Explode\R2Boilerplate-master\All Enemies Explode\obj\Debug\netstandard2.1\AllEnemiesExplode.csproj.AssemblyReference.cache
+C:\Users\katko\Desktop\Ror2 mods\All Enemies Explode\R2Boilerplate-master\All Enemies Explode\obj\Debug\netstandard2.1\AllEnemiesExplode.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\katko\Desktop\Ror2 mods\All Enemies Explode\R2Boilerplate-master\All Enemies Explode\obj\Debug\netstandard2.1\AllEnemiesExplode.AssemblyInfoInputs.cache
+C:\Users\katko\Desktop\Ror2 mods\All Enemies Explode\R2Boilerplate-master\All Enemies Explode\obj\Debug\netstandard2.1\AllEnemiesExplode.AssemblyInfo.cs
+C:\Users\katko\Desktop\Ror2 mods\All Enemies Explode\R2Boilerplate-master\All Enemies Explode\obj\Debug\netstandard2.1\AllEnemiesExplode.csproj.CoreCompileInputs.cache
+C:\Users\katko\Desktop\Ror2 mods\All Enemies Explode\R2Boilerplate-master\All Enemies Explode\obj\Debug\netstandard2.1\AllEnemiesExplode.dll
+C:\Users\katko\Desktop\Ror2 mods\All Enemies Explode\R2Boilerplate-master\All Enemies Explode\obj\Debug\netstandard2.1\AllEnemiesExplode.pdb
+C:\Users\katko\Desktop\Ror2 mods\All Enemies Explode\R2Boilerplate-master\All Enemies Explode\bin\Debug\netstandard2.1\RiskOfOptions.pdb
+C:\Users\katko\Desktop\Ror2 mods\All Enemies Explode\R2Boilerplate-master\All Enemies Explode\obj\Debug\netstandard2.1\AllEnemi.AC2E5ED4.Up2Date

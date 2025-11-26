@@ -1,0 +1,14 @@
+{
+  "strings": {
+    "FuelArrayItem": "Fuel Array",
+    "FuelArrayItemPickup": "Looks like it could power something. <style=cDeath>EXTREMELY unstable...</style>",
+    "FuelArrayItemDescription": "A volatile battery that will explode if too much damage is taken.",
+    "FuelArrayItemLore": "You shouldn't be seeing this! Please ping @egg8929 in the ror2 modding discord and he will probably fail to fix it because he is a dumbass!"
+  },
+  "en": {
+    "FuelArrayItem": "Fuel Array",
+    "FuelArrayItemPickup": "Looks like it could power something. <style=cDeath>EXTREMELY unstable...</style>",
+    "FuelArrayItemDescription": "A volatile battery that will explode if too much damage is taken.",
+    "FuelArrayItemLore": "You shouldn't be seeing this! Please ping @egg8929 in the ror2 modding discord and he will probably fail to fix it because he is a dumbass!"
+  }
+}
