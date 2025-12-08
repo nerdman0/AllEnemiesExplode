@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\katko\\Desktop\\Ror2 mods\\All Enemies Explode\\R2Boilerplate-master\\All Enemies Explode\\AllEnemiesExplode.csproj": {}
+    "C:\\Users\\katko\\Desktop\\Ror2 mods\\All Enemies Explode\\AllEnemiesExplode\\All Enemies Explode\\AllEnemiesExplode.csproj": {}
   },
   "projects": {
-    "C:\\Users\\katko\\Desktop\\Ror2 mods\\All Enemies Explode\\R2Boilerplate-master\\All Enemies Explode\\AllEnemiesExplode.csproj": {
+    "C:\\Users\\katko\\Desktop\\Ror2 mods\\All Enemies Explode\\AllEnemiesExplode\\All Enemies Explode\\AllEnemiesExplode.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\katko\\Desktop\\Ror2 mods\\All Enemies Explode\\R2Boilerplate-master\\All Enemies Explode\\AllEnemiesExplode.csproj",
+        "projectUniqueName": "C:\\Users\\katko\\Desktop\\Ror2 mods\\All Enemies Explode\\AllEnemiesExplode\\All Enemies Explode\\AllEnemiesExplode.csproj",
         "projectName": "AllEnemiesExplode",
-        "projectPath": "C:\\Users\\katko\\Desktop\\Ror2 mods\\All Enemies Explode\\R2Boilerplate-master\\All Enemies Explode\\AllEnemiesExplode.csproj",
+        "projectPath": "C:\\Users\\katko\\Desktop\\Ror2 mods\\All Enemies Explode\\AllEnemiesExplode\\All Enemies Explode\\AllEnemiesExplode.csproj",
         "packagesPath": "C:\\Users\\katko\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\katko\\Desktop\\Ror2 mods\\All Enemies Explode\\R2Boilerplate-master\\All Enemies Explode\\obj\\",
+        "outputPath": "C:\\Users\\katko\\Desktop\\Ror2 mods\\All Enemies Explode\\AllEnemiesExplode\\All Enemies Explode\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\katko\\Desktop\\Ror2 mods\\All Enemies Explode\\R2Boilerplate-master\\NuGet.Config",
+          "C:\\Users\\katko\\Desktop\\Ror2 mods\\All Enemies Explode\\AllEnemiesExplode\\NuGet.Config",
           "C:\\Users\\katko\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
@@ -87,7 +87,7 @@
             },
             "RoR2BepInExPack": {
               "target": "Package",
-              "version": "[1.37.0, )"
+              "version": "[1.38.0, )"
             },
             "UnityEngine.Modules": {
               "include": "Compile",

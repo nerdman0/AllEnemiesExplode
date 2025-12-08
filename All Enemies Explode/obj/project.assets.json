@@ -305,7 +305,7 @@
           "lib/netstandard2.0/com.unity.multiplayer-hlapi.Runtime.dll": {}
         }
       },
-      "RoR2BepInExPack/1.37.0": {
+      "RoR2BepInExPack/1.38.0": {
         "type": "package",
         "dependencies": {
           "BepInEx.Core": "5.4.21",
@@ -1067,16 +1067,16 @@
         "riskofrain2.gamelibs.nuspec"
       ]
     },
-    "RoR2BepInExPack/1.37.0": {
-      "sha512": "sbvEUfmShKcp09dLksysE9rYKZCi7J2RlUXzim4EU9TDdB1uWytUY80bBw+SyY7uYCxo+jmQXhXATwWEtjeg/w==",
+    "RoR2BepInExPack/1.38.0": {
+      "sha512": "xu3jA/JhHPoCc8x7ttNJ9jm0lY0JLTuq7dE84adFRIkhiU0066HZR/fbqz4+AWanB615ncIMqW3AYuTurGaatQ==",
       "type": "package",
-      "path": "ror2bepinexpack/1.37.0",
+      "path": "ror2bepinexpack/1.38.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "lib/netstandard2.1/RoR2BepInExPack.dll",
         "lib/netstandard2.1/RoR2BepInExPack.xml",
-        "ror2bepinexpack.1.37.0.nupkg.sha512",
+        "ror2bepinexpack.1.38.0.nupkg.sha512",
         "ror2bepinexpack.nuspec"
       ]
     },
@@ -2971,7 +2971,7 @@
       "R2API.Language >= 1.1.0",
       "R2API.Prefab >= 1.1.1",
       "RiskOfRain2.GameLibs >= 1.4.0-r.0",
-      "RoR2BepInExPack >= 1.37.0",
+      "RoR2BepInExPack >= 1.38.0",
       "UnityEngine.Modules >= 2021.3.33"
     ]
   },
@@ -2982,17 +2982,17 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\katko\\Desktop\\Ror2 mods\\All Enemies Explode\\R2Boilerplate-master\\All Enemies Explode\\AllEnemiesExplode.csproj",
+      "projectUniqueName": "C:\\Users\\katko\\Desktop\\Ror2 mods\\All Enemies Explode\\AllEnemiesExplode\\All Enemies Explode\\AllEnemiesExplode.csproj",
       "projectName": "AllEnemiesExplode",
-      "projectPath": "C:\\Users\\katko\\Desktop\\Ror2 mods\\All Enemies Explode\\R2Boilerplate-master\\All Enemies Explode\\AllEnemiesExplode.csproj",
+      "projectPath": "C:\\Users\\katko\\Desktop\\Ror2 mods\\All Enemies Explode\\AllEnemiesExplode\\All Enemies Explode\\AllEnemiesExplode.csproj",
       "packagesPath": "C:\\Users\\katko\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\katko\\Desktop\\Ror2 mods\\All Enemies Explode\\R2Boilerplate-master\\All Enemies Explode\\obj\\",
+      "outputPath": "C:\\Users\\katko\\Desktop\\Ror2 mods\\All Enemies Explode\\AllEnemiesExplode\\All Enemies Explode\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\katko\\Desktop\\Ror2 mods\\All Enemies Explode\\R2Boilerplate-master\\NuGet.Config",
+        "C:\\Users\\katko\\Desktop\\Ror2 mods\\All Enemies Explode\\AllEnemiesExplode\\NuGet.Config",
         "C:\\Users\\katko\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
@@ -3062,7 +3062,7 @@
           },
           "RoR2BepInExPack": {
             "target": "Package",
-            "version": "[1.37.0, )"
+            "version": "[1.38.0, )"
           },
           "UnityEngine.Modules": {
             "include": "Compile",

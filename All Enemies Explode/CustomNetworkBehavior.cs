@@ -10,7 +10,7 @@ namespace AllEnemiesExplode
 
         private HealthComponent targetHealthComponent;//the health component of the target
 
-        public float maxHealth;
+        public float maxHealth;//the max health of the target
 
         [SyncVar(hook = nameof(OnSyncTarget))]
         private GameObject target;//the targetted gameobject to follow

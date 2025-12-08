@@ -1,4 +1,5 @@
 ﻿using RoR2;
+//using R2API;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -115,6 +116,10 @@ namespace EntityStates.FuelArrayItem
             //sets duration and explosion radius based on config values
             duration = AllEnemiesExplode.Main.SecondsToBoom.Value;
             explosionRadius = FixExplosionRadius.Value ? (30f/2f)/(4f/3f) : 30f;
+            if (FixExplosionRadius.Value)
+            {
+                explosionRadius *= ExplosionSizeScalar.Value;
+            }
             if (CountDown.vfxPrefab && base.customItemDisplay)
             {
                 //if we are making explosion displays, then create a sphere object and apply the proper values to it
@@ -180,6 +185,7 @@ namespace EntityStates.FuelArrayItem
                 this.spheres = Array.Empty<AEXSphere>();
             }
 
+            //go through each custom display object and remove it
             foreach(GameObject customDisplay in base.customItemDisplay.customDisplays)
             {
                 Destroy(customDisplay);
@@ -262,11 +268,39 @@ namespace EntityStates.FuelArrayItem
                 return;
             }
 
+            //create a fake player gameobject
+            GameObject tempFakePlayer = GameObject.Instantiate(FakePlayer);
+
+            //instantiate attacker and team index
+            GameObject tempAttacker;
+            TeamIndex tempTeam;
+
             //set the explosion position to the cnb object
             Vector3 corePosition = base.networkedBodyAttachment.transform.position;
 
             //set a number to 3x the max health of our creature
             float num = base.networkedBodyAttachment.maxHealth * 3f;
+
+            //increase explosion radius size
+            /*if (FixExplosionRadius.Value)
+            {
+                explosionEffectPrefab.transform.localScale = Vector3.one*ExplosionSizeScalar.Value;
+            } else
+            {
+                explosionEffectPrefab.transform.localScale = Vector3.one;
+            }*/
+
+            //changes values of attacker and team based on if explosion should give money or not
+            if (ExplosionGivesMoney.Value)
+            {
+                tempFakePlayer.GetComponent<CharacterBody>().teamComponent.teamIndex = TeamIndex.Player;
+                tempAttacker = tempFakePlayer;
+                tempTeam = TeamIndex.Player;
+            } else
+            {
+                tempAttacker = base.networkedBodyAttachment.attachedBodyObject;
+                tempTeam = base.networkedBodyAttachment.attachedBody.teamComponent.teamIndex;
+            }
 
             //create an explosion visual effect
             EffectManager.SpawnEffect(CountDown.explosionEffectPrefab, new EffectData
@@ -281,7 +315,7 @@ namespace EntityStates.FuelArrayItem
                 position = corePosition + global::UnityEngine.Random.onUnitSphere,
                 radius = CountDown.explosionRadius,
                 falloffModel = BlastAttack.FalloffModel.None,
-                attacker = base.networkedBodyAttachment.attachedBodyObject,
+                attacker = tempAttacker,
                 inflictor = base.networkedBodyAttachment.gameObject,
                 damageColorIndex = DamageColorIndex.Item,
                 baseDamage = num,
@@ -291,7 +325,7 @@ namespace EntityStates.FuelArrayItem
                 crit = false,
                 procChainMask = default(ProcChainMask),
                 procCoefficient = 0f,
-                teamIndex = base.networkedBodyAttachment.attachedBody.teamComponent.teamIndex
+                teamIndex = tempTeam
             }.Fire();
 
             //if the body still exists, remove the fuel array from it
@@ -303,8 +337,11 @@ namespace EntityStates.FuelArrayItem
                 }
             }
 
+            //remove the fake player
+            Destroy(tempFakePlayer);
+
             //if we were using explodeinstant or explodedelay then we can finally remove the cnb gameobject (since we cancelled the removal before)
-            if(WhatOnDeath.Value == DeathOptions.ExplodeInstant || WhatOnDeath.Value == DeathOptions.ExplodeDelay)
+            if (WhatOnDeath.Value == DeathOptions.ExplodeInstant || WhatOnDeath.Value == DeathOptions.ExplodeDelay)
             {
                 Destroy(base.networkedBodyAttachment.gameObject);
             }
@@ -314,5 +351,6 @@ namespace EntityStates.FuelArrayItem
         }
     }
 
+    //a component given to explosion indicator spheres to make it easier to find them
     public class AEXSphere : MonoBehaviour { }
 }

@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("AllEnemiesExplode")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7fc1975c15ea06bb29c414f0dcd30c8861edf555")]
 [assembly: System.Reflection.AssemblyProductAttribute("AllEnemiesExplode")]
 [assembly: System.Reflection.AssemblyTitleAttribute("AllEnemiesExplode")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

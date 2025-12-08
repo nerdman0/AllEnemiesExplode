@@ -1,6 +1,7 @@
 ﻿using RoR2;
 using R2API;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using RoR2BepInExPack.GameAssetPathsBetter;
 
 namespace AllEnemiesExplode
@@ -8,9 +9,9 @@ namespace AllEnemiesExplode
 
     public static class IDRD
     {
-        //private AssetReferenceGameObject itemDisplayAsset = new UnityEngine.AddressableAssets.AssetReferenceGameObject(RoR2_Base_QuestVolatileBattery.DisplayBatteryArray_prefab);
         public static ItemDisplayRuleDict ItemDisplayTransformations()
         {
+            //create an item display rule dictionary that stores all the next 2000 lines worth of item display rules
             ItemDisplayRuleDict val = new ItemDisplayRuleDict((ItemDisplayRule[])null);
 
             //Larva
@@ -1348,10 +1349,10 @@ namespace AllEnemiesExplode
                 {
                     ruleType = (ItemDisplayRuleType)0,
                     followerPrefabAddress = new UnityEngine.AddressableAssets.AssetReferenceGameObject(RoR2_Base_QuestVolatileBattery.DisplayBatteryArray_prefab),
-                    childName = "FrontFootL",
-                    localPos = new Vector3(0F, 0F, 0F),
-                    localAngles = new Vector3(0F, 0F, 0F),
-                    localScale = new Vector3(1F, 1F, 1F)
+                    childName = "BonusEyeFX",
+                    localPos = new Vector3(0F, -0.03F, 0F),
+                    localAngles = new Vector3(90F, 0F, 0F),
+                    localScale = new Vector3(0.1F, 0.1F, 0.1F)
                 }
             });
 
@@ -1882,10 +1883,10 @@ namespace AllEnemiesExplode
                 {
                     ruleType = (ItemDisplayRuleType)0,
                     followerPrefabAddress = new UnityEngine.AddressableAssets.AssetReferenceGameObject(RoR2_Base_QuestVolatileBattery.DisplayBatteryArray_prefab),
-                    childName = "Chest",
-                    localPos = new Vector3(0F, 0F, 0F),
+                    childName = "ThoraxUpper1",
+                    localPos = new Vector3(0F, 0F, -0.25F),
                     localAngles = new Vector3(0F, 0F, 0F),
-                    localScale = new Vector3(1F, 1F, 1F)
+                    localScale = new Vector3(2F, 2F, 2F)
                 }
             });
 
@@ -2051,23 +2052,96 @@ namespace AllEnemiesExplode
                 }
             });
 
+            //return the item display rule dictionary
             return val;
         }
 
-        /*public static void AddChildren()
+        public static void AddDisplayRuleset()
         {
-            //get the reliquary prefab, model, and childlocator
-            GameObject ReliquaryPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/ArtifactShell/ArtifactShellBody.prefab").WaitForCompletion();
-            GameObject ReliquaryModel = ReliquaryPrefab.GetComponent<ModelLocator>().modelTransform.gameObject;
-            //CharacterModel ReliquaryCM = ReliquaryModel.GetComponent<CharacterModel>();
-            //ReliquaryCM.itemDisplayRuleSet = new ScriptableObject<ItemDisplayRuleSet>();
-            ChildLocator ReliquaryChildren = ReliquaryModel.GetComponent<ChildLocator>();
+            //IDRS for void infestor
+            ItemDisplayRuleSet idrsInfestor = new ItemDisplayRuleSet();
+            idrsInfestor.name = "idrsInfestor";
+            GameObject InfestorPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/DLC1/EliteVoid/VoidInfestorBody.prefab").WaitForCompletion();
+            GameObject InfestorModel = InfestorPrefab.GetComponent<ModelLocator>().modelTransform.gameObject;
+            CharacterModel InfestorCM = InfestorModel.GetComponent<CharacterModel>();
+            InfestorCM.itemDisplayRuleSet = idrsInfestor;
 
-            ReliquaryChildren.AddChild("Sphere", ReliquaryModel.transform.Find("Sphere").transform);
-        }*/
 
-        //Needs ItemDisplayRuleSet: Voidling, Reliquary
-        //Needs Children: healing core, potmobile, void infestor
+
+            //IDRS for voidling
+            ItemDisplayRuleSet idrsVoidling = new ItemDisplayRuleSet();
+            idrsVoidling.name = "idrsVoidling";
+
+            //IDRS for default voidling
+            GameObject VoidlingPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/DLC1/VoidRaidCrab/VoidRaidCrabBody.prefab").WaitForCompletion();
+            GameObject VoidlingModel = VoidlingPrefab.GetComponent<ModelLocator>().modelTransform.gameObject;
+            CharacterModel VoidlingCM = VoidlingModel.GetComponent<CharacterModel>();
+
+            //IDRS for voidling base
+            GameObject VoidlingBasePrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/DLC1/VoidRaidCrab/MiniVoidRaidCrabBodyBase.prefab").WaitForCompletion();
+            GameObject VoidlingBaseModel = VoidlingBasePrefab.GetComponent<ModelLocator>().modelTransform.gameObject;
+            CharacterModel VoidlingBaseCM = VoidlingBaseModel.GetComponent<CharacterModel>();
+
+            //IDRS for voidling phase 1
+            GameObject VoidlingPhase1Prefab = Addressables.LoadAssetAsync<GameObject>("RoR2/DLC1/VoidRaidCrab/MiniVoidRaidCrabBodyPhase1.prefab").WaitForCompletion();
+            GameObject VoidlingPhase1Model = VoidlingPhase1Prefab.GetComponent<ModelLocator>().modelTransform.gameObject;
+            CharacterModel VoidlingPhase1CM = VoidlingPhase1Model.GetComponent<CharacterModel>();
+
+            //IDRS for voidling phase 2
+            GameObject VoidlingPhase2Prefab = Addressables.LoadAssetAsync<GameObject>("RoR2/DLC1/VoidRaidCrab/MiniVoidRaidCrabBodyPhase2.prefab").WaitForCompletion();
+            GameObject VoidlingPhase2Model = VoidlingPhase2Prefab.GetComponent<ModelLocator>().modelTransform.gameObject;
+            CharacterModel VoidlingPhase2CM = VoidlingPhase2Model.GetComponent<CharacterModel>();
+
+            //IDRS for voidling phase 3
+            GameObject VoidlingPhase3Prefab = Addressables.LoadAssetAsync<GameObject>("RoR2/DLC1/VoidRaidCrab/MiniVoidRaidCrabBodyPhase3.prefab").WaitForCompletion();
+            GameObject VoidlingPhase3Model = VoidlingPhase3Prefab.GetComponent<ModelLocator>().modelTransform.gameObject;
+            CharacterModel VoidlingPhase3CM = VoidlingPhase3Model.GetComponent<CharacterModel>();
+
+            //Adding IDRS to charactermodel
+            VoidlingCM.itemDisplayRuleSet = idrsVoidling;
+            VoidlingBaseCM.itemDisplayRuleSet = idrsVoidling;
+            VoidlingPhase1CM.itemDisplayRuleSet = idrsVoidling;
+            VoidlingPhase2CM.itemDisplayRuleSet = idrsVoidling;
+            VoidlingPhase3CM.itemDisplayRuleSet = idrsVoidling;
+        }
+
+        public static void AddChildren()
+        {
+            //Child locators for void infestor
+            //get the infestor prefab, model, and childlocator
+            GameObject InfestorPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/DLC1/EliteVoid/VoidInfestorBody.prefab").WaitForCompletion();
+            GameObject InfestorModel = InfestorPrefab.GetComponent<ModelLocator>().modelTransform.gameObject;
+            ChildLocator InfestorChildren = InfestorModel.GetComponent<ChildLocator>();
+            //add a child called head based on the head object
+            InfestorChildren.AddChild("ROOT", InfestorModel.transform.Find("VoidAffixArmature/ROOT").transform);
+            InfestorChildren.AddChild("ThoraxLower1", InfestorModel.transform.Find("VoidAffixArmature/ROOT/ThoraxLower1").transform);
+            InfestorChildren.AddChild("LegBack1.l", InfestorModel.transform.Find("VoidAffixArmature/ROOT/ThoraxLower1/LegBack1.l").transform);
+            InfestorChildren.AddChild("LegBack2.l", InfestorModel.transform.Find("VoidAffixArmature/ROOT/ThoraxLower1/LegBack1.l/LegBack2.l").transform);
+            InfestorChildren.AddChild("LegBack1.r", InfestorModel.transform.Find("VoidAffixArmature/ROOT/ThoraxLower1/LegBack1.r").transform);
+            InfestorChildren.AddChild("LegBack2.r", InfestorModel.transform.Find("VoidAffixArmature/ROOT/ThoraxLower1/LegBack1.r/LegBack2.r").transform);
+            InfestorChildren.AddChild("ThoraxLower2", InfestorModel.transform.Find("VoidAffixArmature/ROOT/ThoraxLower1/ThoraxLower2").transform);
+            InfestorChildren.AddChild("Tail1", InfestorModel.transform.Find("VoidAffixArmature/ROOT/ThoraxLower1/ThoraxLower2/Tail1").transform);
+            InfestorChildren.AddChild("Tail2", InfestorModel.transform.Find("VoidAffixArmature/ROOT/ThoraxLower1/ThoraxLower2/Tail1/Tail2").transform);
+            InfestorChildren.AddChild("Tail3", InfestorModel.transform.Find("VoidAffixArmature/ROOT/ThoraxLower1/ThoraxLower2/Tail1/Tail2/Tail3").transform);
+            InfestorChildren.AddChild("ThoraxUpper1", InfestorModel.transform.Find("VoidAffixArmature/ROOT/ThoraxUpper1").transform);
+            InfestorChildren.AddChild("LegMidBack1.l", InfestorModel.transform.Find("VoidAffixArmature/ROOT/ThoraxUpper1/LegMidBack1.l").transform);
+            InfestorChildren.AddChild("LegMidBack2.l", InfestorModel.transform.Find("VoidAffixArmature/ROOT/ThoraxUpper1/LegMidBack1.l/LegMidBack2.l").transform);
+            InfestorChildren.AddChild("LegMidBack1.r", InfestorModel.transform.Find("VoidAffixArmature/ROOT/ThoraxUpper1/LegMidBack1.r").transform);
+            InfestorChildren.AddChild("LegMidBack2.r", InfestorModel.transform.Find("VoidAffixArmature/ROOT/ThoraxUpper1/LegMidBack1.r/LegMidBack2.r").transform);
+            InfestorChildren.AddChild("ThoraxUpper2", InfestorModel.transform.Find("VoidAffixArmature/ROOT/ThoraxUpper1/ThoraxUpper2").transform);
+            InfestorChildren.AddChild("Head", InfestorModel.transform.Find("VoidAffixArmature/ROOT/ThoraxUpper1/ThoraxUpper2/Head").transform);
+            InfestorChildren.AddChild("LegFront1.l", InfestorModel.transform.Find("VoidAffixArmature/ROOT/ThoraxUpper1/ThoraxUpper2/Head/LegFront1.l").transform);
+            InfestorChildren.AddChild("LegFront2.l", InfestorModel.transform.Find("VoidAffixArmature/ROOT/ThoraxUpper1/ThoraxUpper2/Head/LegFront1.l/LegFront2.l").transform);
+            InfestorChildren.AddChild("LegFront1.r", InfestorModel.transform.Find("VoidAffixArmature/ROOT/ThoraxUpper1/ThoraxUpper2/Head/LegFront1.r").transform);
+            InfestorChildren.AddChild("LegFront2.r", InfestorModel.transform.Find("VoidAffixArmature/ROOT/ThoraxUpper1/ThoraxUpper2/Head/LegFront1.r/LegFront2.r").transform);
+            InfestorChildren.AddChild("LegMidFront1.l", InfestorModel.transform.Find("VoidAffixArmature/ROOT/ThoraxUpper1/ThoraxUpper2/LegMidFront1.l").transform);
+            InfestorChildren.AddChild("LegMidFront2.l", InfestorModel.transform.Find("VoidAffixArmature/ROOT/ThoraxUpper1/ThoraxUpper2/LegMidFront1.l/LegMidFront2.l").transform);
+            InfestorChildren.AddChild("LegMidFront1.r", InfestorModel.transform.Find("VoidAffixArmature/ROOT/ThoraxUpper1/ThoraxUpper2/LegMidFront1.r").transform);
+            InfestorChildren.AddChild("LegMidFront2.r", InfestorModel.transform.Find("VoidAffixArmature/ROOT/ThoraxUpper1/ThoraxUpper2/LegMidFront1.r/LegMidFront2.r").transform);
+        }
+
+        //Needs ItemDisplayRuleSet: Reliquary
+        //Needs Children: healing core, potmobile
         //Needs childlocators: lunar rain, lunar rain shard, ancestral pod, general mesh, ??? mithrix
     }
 }

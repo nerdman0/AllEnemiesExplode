@@ -1,0 +1,7 @@
+﻿[*.cs]
+
+# IDE0058: Expression value is never used
+dotnet_diagnostic.IDE0058.severity = none
+
+# IDE0034: Simplify 'default' expression
+dotnet_diagnostic.IDE0034.severity = silent
