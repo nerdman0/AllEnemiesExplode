@@ -329,6 +329,7 @@ ASALocalRun/
 # MFractors (Xamarin productivity tool) working folder 
 .mfractor/
 
-# Previous version/thunderstore files
-Thunderstore/
+# Previous version/output files
 Previous_Versions/
+All_Enemies_Explode/bin/
+All_Enemies_Explode/obj/

@@ -1,14 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.36518.9
+VisualStudioVersion = 17.14.36518.9 d17.14
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AllEnemiesExplode", "All Enemies Explode\AllEnemiesExplode.csproj", "{8EA958BA-2DB8-3092-33D0-E55CF1622773}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
-	ProjectSection(SolutionItems) = preProject
-		.editorconfig = .editorconfig
-	EndProjectSection
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AllEnemiesExplode", "All_Enemies_Explode\AllEnemiesExplode.csproj", "{8EA958BA-2DB8-3092-33D0-E55CF1622773}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,6 +20,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {0E248D48-9073-4EE3-AE08-4E06A1F2C933}
+		SolutionGuid = {D8100134-807A-4A5B-92ED-548167DE1776}
 	EndGlobalSection
 EndGlobal
