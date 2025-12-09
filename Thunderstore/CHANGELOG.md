@@ -1,3 +1,12 @@
+## 1.0.5
+
+* Added config to turn off the mod (enemies with a fuel array will retain the fuel array)
+* Added config to change fuel array activation threshold
+* Added config to change explosion damage
+* Added config to make fuel array explosion not damage teammates
+
+
+
 ## 1.0.4
 
 * Added ability to change explosion size
