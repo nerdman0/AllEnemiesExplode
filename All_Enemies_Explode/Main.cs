@@ -64,12 +64,16 @@ namespace AllEnemiesExplode
         public const string PluginGUID = PluginAuthor + "." + PluginName;
         public const string PluginAuthor = "Nerdman";
         public const string PluginName = "AllEnemiesExplode";
-        public const string PluginVersion = "1.0.4";
+        public const string PluginVersion = "1.0.5";
 
         //Define the config values
+        public static ConfigEntry<bool> ModEnabled;
         public static ConfigEntry<float> SecondsToBoom;
+        public static ConfigEntry<float> ExplosionThreshold;
+        public static ConfigEntry<float> ExplosionDamage;
         public static ConfigEntry<DeathOptions> WhatOnDeath;
         public static ConfigEntry<bool> ExplosionGivesMoney;
+        public static ConfigEntry<bool> ExplosionDamagesEnemies;
         public static ConfigEntry<bool> FixExplosionRadius;
         public static ConfigEntry<float> ExplosionSizeScalar;
         public static ConfigEntry<bool> EnableItemDisplay;
@@ -183,13 +187,17 @@ namespace AllEnemiesExplode
         public void Init()
         {
             //bind the configs to actual configs
+            ModEnabled = Config.Bind<bool>("Mod: " + PluginName, "Mod enabled:", true, "Is the mod enabled (should enemies spawn with a fuel array)\n(Default: true)");
             SecondsToBoom = Config.Bind<float>("Mod: " + PluginName, "Enemy explosion delay:", 3f, "How long in seconds should it take for the enemy to explode after reaching the explosion threshold\n(Default: 3)");
+            ExplosionThreshold = Config.Bind<float>("Mod: " + PluginName, "Activation threshold:", 50f, "What percentage of health should activate the fuel array\n(Default: 50)");
+            ExplosionDamage = Config.Bind<float>("Mod: " + PluginName, "Explosion damage:", 3f, "How much damage should the explosion do (multiplied by enemy health)\n(Default: 3)");
             WhatOnDeath = Config.Bind<DeathOptions>("Mod: " + PluginName, "Fuel array action on death:", DeathOptions.ExplodeDelay, "What should happen to the fuel array when the enemy holding it dies\n(Default: ExplodeDelay)\n\n" +
                 "Remove: Stops the explosion from hapenning at all\n" +
                 "Normal: Runs normally (gives unpredictable results, but most stable)\n" +
                 "ExplodeInstant: The enemy explodes instantly on death (Wisps are bugged)\n" +
                 "ExplodeDelay: The enemy explodes after the fuel array timer reaches 0");
-            ExplosionGivesMoney = Config.Bind<bool>("Mod: " + PluginName, "Explosions give money:", true, "Should enemy explosions give the player money?\n(Default: true)");
+            ExplosionGivesMoney = Config.Bind<bool>("Mod: " + PluginName, "Explosions give money:", true, "Should enemy explosions give the player money\n(Default: true)");
+            ExplosionDamagesEnemies = Config.Bind<bool>("Mod: " + PluginName, "Explosion damages enemies:", true, "Should enemies take damage from the fuel array\n(Default: true)");
             FixExplosionRadius = Config.Bind<bool>("Mod: " + PluginName, "Fix explosion radius:", false, "Due to some oversights in the original code the explosion radius is nearly three times larger that what it visually looks like it should be, this fixes that\n(Default: false)");
             ExplosionSizeScalar = Config.Bind<float>("Mod: " + PluginName, "Explosion size scalar:", 1f, "How many times bigger should the explosion be (scales explosion vfx)\n(Default: 1)");
             EnableItemDisplay = Config.Bind<bool>("Mod: " + PluginName, "Display item display:", true, "Enable the fuel array to be visible on the enemies themselves. Setting this to false also disables the countdown effect\n(Default: true)");
@@ -206,9 +214,13 @@ namespace AllEnemiesExplode
         public void CoolerInit()
         {
             //set up entries in the risk of options settings
+            ModSettingsManager.AddOption(new CheckBoxOption(ModEnabled));
             ModSettingsManager.AddOption(new StepSliderOption(SecondsToBoom, new StepSliderConfig() { min = 0f, max = 15f, increment = 0.1f }));
+            ModSettingsManager.AddOption(new StepSliderOption(ExplosionThreshold, new StepSliderConfig() { min = 0f, max = 100f, increment = 1f }));
+            ModSettingsManager.AddOption(new StepSliderOption(ExplosionDamage, new StepSliderConfig() { min = 0f, max = 100f, increment = 0.1f }));
             ModSettingsManager.AddOption(new ChoiceOption(WhatOnDeath));
             ModSettingsManager.AddOption(new CheckBoxOption(ExplosionGivesMoney));
+            ModSettingsManager.AddOption(new CheckBoxOption(ExplosionDamagesEnemies));
             ModSettingsManager.AddOption(new CheckBoxOption(FixExplosionRadius));
             ModSettingsManager.AddOption(new StepSliderOption(ExplosionSizeScalar, new StepSliderConfig() { min = 0f, max = 10f, increment = 0.1f, checkIfDisabled = SizeFixer }));
             ModSettingsManager.AddOption(new CheckBoxOption(EnableItemDisplay));
@@ -251,6 +263,11 @@ namespace AllEnemiesExplode
 
         private void AddExplosivePayload(SpawnCard.SpawnResult spawnResult)
         {
+            if (!ModEnabled.Value) //if the mod isn't enabled, do nothing
+            {
+                return;
+            }
+
             //get the character master of the spawned enemy
             CharacterMaster characterMaster = (spawnResult.spawnedInstance ? spawnResult.spawnedInstance.GetComponent<CharacterMaster>() : null);
             //if there is no charactermaster, or the spawned enemy isn't an enemy, cancel
@@ -268,6 +285,11 @@ namespace AllEnemiesExplode
 
         private void AddScriptedExplosivePayload(On.RoR2.ScriptedCombatEncounter.orig_Spawn orig, ScriptedCombatEncounter self, ref ScriptedCombatEncounter.SpawnInfo spawnInfo)
         {
+            if (!ModEnabled.Value) //if the mod isn't enabled, do nothing
+            {
+                orig(self, ref spawnInfo);
+            }
+
             //when an ambush happens, check if it uses character spawn cards
             if (spawnInfo.spawnCard.GetType() == typeof(CharacterSpawnCard))
             {
@@ -314,6 +336,11 @@ namespace AllEnemiesExplode
         
         private void AddSpawnBodyExplosivePayload(On.RoR2.CharacterMaster.orig_SpawnBodyHere orig, CharacterMaster self)
         {
+            if (!ModEnabled.Value) //if the mod isn't enabled, do nothing
+            {
+                orig(self);
+            }
+
             //if something is spawned with spawnbodyhere and it has an inventory, give it a fuel array
             if (self.inventory)
             {
@@ -324,6 +351,11 @@ namespace AllEnemiesExplode
         
         private void AntiSnek(On.EntityStates.Mage.FlyUpState.orig_OnEnter orig, EntityStates.Mage.FlyUpState self)
         {
+            if (!ModEnabled.Value) //if the mod isn't enabled, do nothing
+            {
+                orig(self);
+            }
+
             //if anti snek is on
             if (Snek.Value)
             {
@@ -348,7 +380,7 @@ namespace AllEnemiesExplode
                     attacker = self.characterBody.gameObject,//if explosions give money, set attacker to fake player
                     inflictor = self.characterBody.gameObject,
                     damageColorIndex = DamageColorIndex.Item,
-                    baseDamage = self.healthComponent.fullCombinedHealth*3f,
+                    baseDamage = self.healthComponent.fullCombinedHealth*ExplosionDamage.Value,
                     baseForce = 5000f,
                     bonusForce = UnityEngine.Vector3.zero,
                     attackerFiltering = AttackerFiltering.AlwaysHit,

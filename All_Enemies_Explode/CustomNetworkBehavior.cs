@@ -10,7 +10,13 @@ namespace AllEnemiesExplode
 
         private HealthComponent targetHealthComponent;//the health component of the target
 
+        private TeamComponent targetTeamComponent;//the team component of the target
+
         public float maxHealth;//the max health of the target
+
+        public TeamIndex teamIndex;//the team index of the target
+
+        public GameObject inflictor;//the inflictor which is either the target or this
 
         [SyncVar(hook = nameof(OnSyncTarget))]
         private GameObject target;//the targetted gameobject to follow
@@ -21,6 +27,7 @@ namespace AllEnemiesExplode
             target = newTarget;
             targetTransform = target ? target.transform : null;
             targetHealthComponent = target ? target.GetComponent<HealthComponent>() : null;
+            targetTeamComponent = target ? target.GetComponent<TeamComponent>() : null;
             attachedBody = target ? target.GetComponent<CharacterBody>() : null;
         }
 
@@ -48,6 +55,19 @@ namespace AllEnemiesExplode
             if (targetHealthComponent)
             {
                 maxHealth = targetHealthComponent.fullCombinedHealth;
+            }
+            //if it has a team component, team
+            if (targetTeamComponent)
+            {
+                teamIndex = targetTeamComponent.teamIndex;
+            }
+            //if target exists, inflict
+            if (target)
+            {
+                inflictor = target;
+            } else
+            {
+                inflictor = base.gameObject;
             }
         }
 

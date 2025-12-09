@@ -50,7 +50,7 @@ namespace EntityStates.FuelArrayItem
     public class Monitor : FuelArrayItemBaseState
     {
         private float previousHealthFraction;//the previous ticks health fraction
-        private static float healthFractionDetonationThreshold = 0.5f;//the health fraction at which the explosion should activate
+        private float healthFractionDetonationThreshold = ExplosionThreshold.Value/100f;//the health fraction at which the explosion should activate
 
         //make the base object and this object tick
         public override void FixedUpdate()
@@ -83,7 +83,7 @@ namespace EntityStates.FuelArrayItem
             }
             float combinedHealthFraction = base.attachedHealthComponent.combinedHealthFraction;
             //if the current health is below the countdown threshold, and the previous ticks health isn't then detonate (this is done so the countdown only triggers once)
-            if (combinedHealthFraction <= Monitor.healthFractionDetonationThreshold && Monitor.healthFractionDetonationThreshold < this.previousHealthFraction)
+            if (combinedHealthFraction <= healthFractionDetonationThreshold && healthFractionDetonationThreshold < this.previousHealthFraction)
             {
                 this.outer.SetNextState(new CountDown());
             }
@@ -273,13 +273,13 @@ namespace EntityStates.FuelArrayItem
 
             //instantiate attacker and team index
             GameObject tempAttacker;
-            TeamIndex tempTeam;
+            //TeamIndex tempTeam;
 
             //set the explosion position to the cnb object
             Vector3 corePosition = base.networkedBodyAttachment.transform.position;
 
             //set a number to 3x the max health of our creature
-            float num = base.networkedBodyAttachment.maxHealth * 3f;
+            float num = base.networkedBodyAttachment.maxHealth * ExplosionDamage.Value;
 
             //increase explosion radius size
             /*if (FixExplosionRadius.Value)
@@ -295,11 +295,9 @@ namespace EntityStates.FuelArrayItem
             {
                 tempFakePlayer.GetComponent<CharacterBody>().teamComponent.teamIndex = TeamIndex.Player;
                 tempAttacker = tempFakePlayer;
-                tempTeam = TeamIndex.Player;
             } else
             {
                 tempAttacker = base.networkedBodyAttachment.attachedBodyObject;
-                tempTeam = base.networkedBodyAttachment.attachedBody.teamComponent.teamIndex;
             }
 
             //create an explosion visual effect
@@ -316,16 +314,16 @@ namespace EntityStates.FuelArrayItem
                 radius = CountDown.explosionRadius,
                 falloffModel = BlastAttack.FalloffModel.None,
                 attacker = tempAttacker,
-                inflictor = base.networkedBodyAttachment.gameObject,
+                inflictor = base.networkedBodyAttachment.inflictor,
                 damageColorIndex = DamageColorIndex.Item,
                 baseDamage = num,
                 baseForce = 5000f,
                 bonusForce = Vector3.zero,
-                attackerFiltering = AttackerFiltering.AlwaysHit,
+                attackerFiltering = ExplosionDamagesEnemies.Value ? AttackerFiltering.AlwaysHit : AttackerFiltering.AlwaysHitSelf,//if explosion damages enemies, then hit all, otherwise never hit self
                 crit = false,
                 procChainMask = default(ProcChainMask),
                 procCoefficient = 0f,
-                teamIndex = tempTeam
+                teamIndex = base.networkedBodyAttachment.teamIndex
             }.Fire();
 
             //if the body still exists, remove the fuel array from it

@@ -1,6 +1,6 @@
 ﻿{
 	"name": "AllEnemiesExplode",
-	"version_number": "1.0.4",
+	"version_number": "1.0.5",
 	"website_url": "",
 	"description": "All enemies spawn with a BOMB, let hell BREAK LOOSE",
 	"dependencies": [
