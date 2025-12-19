@@ -1,3 +1,12 @@
+## 1.0.6
+
+* Added self damage config (automatically enabled when friendly fire is enabled)
+* Added option to make summons spawn with fuel arrays
+* Added option to spawn with fuel array item
+* Fixed fuel array visual effect not scaling with explosion size when FixExplosionRadius config was enabled
+
+
+
 ## 1.0.5
 
 * Added config to turn off the mod (enemies with a fuel array will retain the fuel array)

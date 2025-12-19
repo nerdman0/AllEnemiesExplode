@@ -20,6 +20,7 @@ using UnityEngine.Networking;
 //using static EntityStates.FuelArrayItem.AEXSphere;
 //using static RoR2.GenericPickupController;
 using Path = System.IO.Path;
+using System;
 
 namespace AllEnemiesExplode
 {
@@ -64,16 +65,19 @@ namespace AllEnemiesExplode
         public const string PluginGUID = PluginAuthor + "." + PluginName;
         public const string PluginAuthor = "Nerdman";
         public const string PluginName = "AllEnemiesExplode";
-        public const string PluginVersion = "1.0.5";
+        public const string PluginVersion = "1.0.6";
 
         //Define the config values
         public static ConfigEntry<bool> ModEnabled;
+        public static ConfigEntry<bool> StartWithBomb;
+        public static ConfigEntry<bool> SummonWithBomb;
         public static ConfigEntry<float> SecondsToBoom;
         public static ConfigEntry<float> ExplosionThreshold;
         public static ConfigEntry<float> ExplosionDamage;
         public static ConfigEntry<DeathOptions> WhatOnDeath;
         public static ConfigEntry<bool> ExplosionGivesMoney;
         public static ConfigEntry<bool> ExplosionDamagesEnemies;
+        public static ConfigEntry<bool> ExplosionDamagesSelf;
         public static ConfigEntry<bool> FixExplosionRadius;
         public static ConfigEntry<float> ExplosionSizeScalar;
         public static ConfigEntry<bool> EnableItemDisplay;
@@ -99,8 +103,8 @@ namespace AllEnemiesExplode
         //Define a fake player
         public static GameObject FakePlayer;
 
-        //Define explosion effect prefab
-        public static GameObject ExplosionFX;
+        //Define an explosion prefab
+        public static GameObject ExplosionPrefab;
 
         // The Awake() method is run at the very start when the game is initialized.
         public void Awake()
@@ -151,8 +155,9 @@ namespace AllEnemiesExplode
             FakePlayer.GetComponent<CharacterBody>().teamComponent = FakePlayer.GetComponent<TeamComponent>();
             FakePlayer.GetComponent<CharacterBody>().teamComponent.teamIndex = TeamIndex.None;
 
-            //get the damn explosion effect or i am going to fucking die
-            ExplosionFX = PrefabAPI.InstantiateClone(Addressables.LoadAssetAsync<GameObject>("RoR2/Base/QuestVolatileBattery/VolatileBatteryExplosion.prefab").WaitForCompletion(), "ExplosionEffectClone");
+            //Set the explosion prefabs effect component to allow scale
+            ExplosionPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/QuestVolatileBattery/VolatileBatteryExplosion.prefab").WaitForCompletion();
+            ExplosionPrefab.GetComponent<EffectComponent>().applyScale = true;
 
             //Add idrs for enemies missing them
             IDRD.AddDisplayRuleset();
@@ -188,6 +193,8 @@ namespace AllEnemiesExplode
         {
             //bind the configs to actual configs
             ModEnabled = Config.Bind<bool>("Mod: " + PluginName, "Mod enabled:", true, "Is the mod enabled (should enemies spawn with a fuel array)\n(Default: true)");
+            StartWithBomb = Config.Bind<bool>("Mod: " + PluginName, "Start with a fuel array:", false, "Should you start the game with a fuel array? (acts like an item, cannot be used for rex unlock)\n(Default: false)");
+            SummonWithBomb = Config.Bind<bool>("Mod: " + PluginName, "Summon with a fuel array:", false, "Should summons get a fuel array on spawning? (acts like an item)\n(Default: false)");
             SecondsToBoom = Config.Bind<float>("Mod: " + PluginName, "Enemy explosion delay:", 3f, "How long in seconds should it take for the enemy to explode after reaching the explosion threshold\n(Default: 3)");
             ExplosionThreshold = Config.Bind<float>("Mod: " + PluginName, "Activation threshold:", 50f, "What percentage of health should activate the fuel array\n(Default: 50)");
             ExplosionDamage = Config.Bind<float>("Mod: " + PluginName, "Explosion damage:", 3f, "How much damage should the explosion do (multiplied by enemy health)\n(Default: 3)");
@@ -198,6 +205,7 @@ namespace AllEnemiesExplode
                 "ExplodeDelay: The enemy explodes after the fuel array timer reaches 0");
             ExplosionGivesMoney = Config.Bind<bool>("Mod: " + PluginName, "Explosions give money:", true, "Should enemy explosions give the player money\n(Default: true)");
             ExplosionDamagesEnemies = Config.Bind<bool>("Mod: " + PluginName, "Explosion damages enemies:", true, "Should enemies take damage from the fuel array\n(Default: true)");
+            ExplosionDamagesSelf = Config.Bind<bool>("Mod: " + PluginName, "Explosion damages self:", true, "Should the enemy holding the fuel array take damage from the fuel array\n(Default: true)");
             FixExplosionRadius = Config.Bind<bool>("Mod: " + PluginName, "Fix explosion radius:", false, "Due to some oversights in the original code the explosion radius is nearly three times larger that what it visually looks like it should be, this fixes that\n(Default: false)");
             ExplosionSizeScalar = Config.Bind<float>("Mod: " + PluginName, "Explosion size scalar:", 1f, "How many times bigger should the explosion be (scales explosion vfx)\n(Default: 1)");
             EnableItemDisplay = Config.Bind<bool>("Mod: " + PluginName, "Display item display:", true, "Enable the fuel array to be visible on the enemies themselves. Setting this to false also disables the countdown effect\n(Default: true)");
@@ -215,12 +223,15 @@ namespace AllEnemiesExplode
         {
             //set up entries in the risk of options settings
             ModSettingsManager.AddOption(new CheckBoxOption(ModEnabled));
+            ModSettingsManager.AddOption(new CheckBoxOption(StartWithBomb));
+            ModSettingsManager.AddOption(new CheckBoxOption(SummonWithBomb));
             ModSettingsManager.AddOption(new StepSliderOption(SecondsToBoom, new StepSliderConfig() { min = 0f, max = 15f, increment = 0.1f }));
             ModSettingsManager.AddOption(new StepSliderOption(ExplosionThreshold, new StepSliderConfig() { min = 0f, max = 100f, increment = 1f }));
             ModSettingsManager.AddOption(new StepSliderOption(ExplosionDamage, new StepSliderConfig() { min = 0f, max = 100f, increment = 0.1f }));
             ModSettingsManager.AddOption(new ChoiceOption(WhatOnDeath));
             ModSettingsManager.AddOption(new CheckBoxOption(ExplosionGivesMoney));
             ModSettingsManager.AddOption(new CheckBoxOption(ExplosionDamagesEnemies));
+            ModSettingsManager.AddOption(new CheckBoxOption(ExplosionDamagesSelf));
             ModSettingsManager.AddOption(new CheckBoxOption(FixExplosionRadius));
             ModSettingsManager.AddOption(new StepSliderOption(ExplosionSizeScalar, new StepSliderConfig() { min = 0f, max = 10f, increment = 0.1f, checkIfDisabled = SizeFixer }));
             ModSettingsManager.AddOption(new CheckBoxOption(EnableItemDisplay));
@@ -253,12 +264,14 @@ namespace AllEnemiesExplode
         public void Hooks()//add hooks onto some methods/events
         {
             SpawnCard.onSpawnedServerGlobal += AddExplosivePayload;
+            Run.onRunStartGlobal += StartWithExplosivePayload;
+            MasterSummon.onServerMasterSummonGlobal += SummonsWithExplosivePayload;
             On.RoR2.ScriptedCombatEncounter.Spawn += AddScriptedExplosivePayload;
             On.RoR2.CharacterMaster.SpawnBodyHere += AddSpawnBodyExplosivePayload;
             On.RoR2.CharacterBody.OnInventoryChanged += CharacterBody_OnInventoryChanged;
             On.EntityStates.Mage.FlyUpState.OnEnter += AntiSnek;
             IL.EntityStates.VoidInfestor.Infest.FixedUpdate += DontCountInfest;
-            //On.EntityStates.QuestVolatileBattery.CountDown.Detonate += FixExplosion;
+            IL.EntityStates.QuestVolatileBattery.CountDown.Detonate += FixExplosionScale;
         }
 
         private void AddExplosivePayload(SpawnCard.SpawnResult spawnResult)
@@ -281,6 +294,46 @@ namespace AllEnemiesExplode
             }
             //otherwise, put a fuel array item into their inventory
             characterMaster.inventory.GiveItemPermanent(FuelArrayItem);
+        }
+
+        private void StartWithExplosivePayload(Run run)
+        {
+            if(!ModEnabled.Value) { return; } //if the mod isn't enabled, do nothing
+            if(!StartWithBomb.Value) { return; }//if the player shouldn't start with a bomb, also do nothing
+
+            if (!NetworkServer.active)
+            {
+                //if the client has this enabled, do nothing
+                Log.Debug("Client called StartWithExplosivePayload");
+                return;
+            }
+
+            if (NetworkServer.active)
+            {
+                //if the server has this enabled, go through each player and add a fuel array item
+                foreach (PlayerCharacterMasterController playerCharacterMasterController in PlayerCharacterMasterController.instances)
+                {
+                    Inventory inventory = playerCharacterMasterController.master.inventory;
+                    if (inventory)
+                    {
+                        inventory.GiveItemPermanent(FuelArrayItem, 1);
+                    }
+                }
+            }
+        }
+
+        private void SummonsWithExplosivePayload(MasterSummon.MasterSummonReport summonReport)
+        {
+            if (!ModEnabled.Value) { return; } //if the mod isn't enabled, do nothing
+            if (!SummonWithBomb.Value) { return; } //if summons shouldn't spawn with a bomb, also do nothing
+
+            //get the summons charactermaster
+            CharacterMaster summonMasterInstance = summonReport.summonMasterInstance;
+            if (summonMasterInstance)
+            {
+                //give it a fuel array (if it exists)
+                summonMasterInstance.inventory.GiveItemPermanent(FuelArrayItem, 1);
+            }
         }
 
         private void AddScriptedExplosivePayload(On.RoR2.ScriptedCombatEncounter.orig_Spawn orig, ScriptedCombatEncounter self, ref ScriptedCombatEncounter.SpawnInfo spawnInfo)
@@ -438,6 +491,21 @@ namespace AllEnemiesExplode
             });
         }
 
+        private void FixExplosionScale(ILContext il)
+        {
+            //do il cursor stuff idk
+            ILCursor c = new ILCursor(il);
+            //go to the loading of explosion radius
+            c.GotoNext(i => i.MatchStfld<EffectData>("scale"));
+            c.Index--;
+            //delete the call
+            c.Remove();
+            //load "this"
+            c.Emit(OpCodes.Ldarg_0);
+            //load 1f onto the stack
+            c.EmitDelegate((EntityStates.QuestVolatileBattery.CountDown self) => 1f);
+        }
+
         private void CharacterBody_OnInventoryChanged(On.RoR2.CharacterBody.orig_OnInventoryChanged orig, CharacterBody self)
         {
             if (NetworkServer.active)
@@ -447,13 +515,6 @@ namespace AllEnemiesExplode
             }
             orig(self);
         }
-
-        //reset explosion vfx size for normal explosion
-        /*private void FixExplosion(On.EntityStates.QuestVolatileBattery.CountDown.orig_Detonate orig, EntityStates.QuestVolatileBattery.CountDown self)
-        {
-            Addressables.LoadAssetAsync<GameObject>("RoR2/Base/QuestVolatileBattery/VolatileBatteryExplosion.prefab").WaitForCompletion().transform.localScale = Vector3.one;
-            orig(self);
-        }*/
     }
 
     //dih

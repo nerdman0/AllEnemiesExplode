@@ -273,22 +273,15 @@ namespace EntityStates.FuelArrayItem
 
             //instantiate attacker and team index
             GameObject tempAttacker;
-            //TeamIndex tempTeam;
+
+            //instantiate an attackerfilter
+            AttackerFiltering attackerFiltering = AttackerFiltering.AlwaysHit;
 
             //set the explosion position to the cnb object
             Vector3 corePosition = base.networkedBodyAttachment.transform.position;
 
             //set a number to 3x the max health of our creature
             float num = base.networkedBodyAttachment.maxHealth * ExplosionDamage.Value;
-
-            //increase explosion radius size
-            /*if (FixExplosionRadius.Value)
-            {
-                explosionEffectPrefab.transform.localScale = Vector3.one*ExplosionSizeScalar.Value;
-            } else
-            {
-                explosionEffectPrefab.transform.localScale = Vector3.one;
-            }*/
 
             //changes values of attacker and team based on if explosion should give money or not
             if (ExplosionGivesMoney.Value)
@@ -300,11 +293,17 @@ namespace EntityStates.FuelArrayItem
                 tempAttacker = base.networkedBodyAttachment.attachedBodyObject;
             }
 
+            //changes what the filtering is depending on the config and if the holder is a player
+            if (!base.networkedBodyAttachment.attachedBody.isPlayerControlled && !ExplosionDamagesEnemies.Value)
+            {
+                attackerFiltering = AttackerFiltering.NeverHitSelf;
+            }
+
             //create an explosion visual effect
             EffectManager.SpawnEffect(CountDown.explosionEffectPrefab, new EffectData
             {
                 origin = corePosition,
-                scale = CountDown.explosionRadius
+                scale = FixExplosionRadius.Value ? ExplosionSizeScalar.Value : 1f//scales explosion effect to the size of the explosion
             }, true);
 
             //create an explosion with all the necessary stats, then fire the explosion
@@ -319,12 +318,68 @@ namespace EntityStates.FuelArrayItem
                 baseDamage = num,
                 baseForce = 5000f,
                 bonusForce = Vector3.zero,
-                attackerFiltering = ExplosionDamagesEnemies.Value ? AttackerFiltering.AlwaysHit : AttackerFiltering.AlwaysHitSelf,//if explosion damages enemies, then hit all, otherwise never hit self
+                attackerFiltering = attackerFiltering,
                 crit = false,
                 procChainMask = default(ProcChainMask),
                 procCoefficient = 0f,
                 teamIndex = base.networkedBodyAttachment.teamIndex
             }.Fire();
+
+            //if the explosions don't do friendly fire, but the character holding the enemy should still explode, create an explosion that only hits self
+            if (!ExplosionDamagesEnemies.Value && base.networkedBodyAttachment)
+            {
+                if (ExplosionDamagesSelf.Value && base.networkedBodyAttachment.attachedBody)
+                {
+                    //set the gold reward
+                    uint goldReward = 0;
+                    //if there is a character master, set the gold reward to it's money amount
+                    if (base.networkedBodyAttachment.attachedBody.master)
+                    {
+                        goldReward = base.networkedBodyAttachment.attachedBody.master.money;
+                        //if its eclipse 8 or higher do the 20% less money thing
+                        if (Run.instance.selectedDifficulty >= DifficultyIndex.Eclipse6)
+                        {
+                            goldReward = (uint)(goldReward * 0.8f);
+                        }
+                    }
+
+                    //create a sphere "explosion"
+                    Vector3 vector = base.networkedBodyAttachment.attachedBodyObject.transform.position;
+                    Collider[] array = Physics.OverlapSphere(vector, CountDown.explosionRadius, LayerIndex.entityPrecise.mask);
+                    int len = array.Length;
+                    
+                    //check if this enemy is in the sphere
+                    for(int i = 0; i < len; i++)
+                    {
+                        Collider collider = array[i];
+                        if (collider.GetComponent<HurtBox>())
+                        {
+                            if (collider.GetComponent<HurtBox>().healthComponent)
+                            {
+                                if (collider.GetComponent<HurtBox>().healthComponent.gameObject == base.networkedBodyAttachment.attachedBodyObject)
+                                {
+                                    //if it is in the sphere, damage it then end the for loop
+                                    base.networkedBodyAttachment.attachedBody.healthComponent.TakeDamage(new DamageInfo{ damage = num });
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
+                    //if the "explosion" kills and its not a player and the player should get money, give money
+                    if (ExplosionGivesMoney.Value)
+                    {
+                        if (!base.networkedBodyAttachment.attachedBody.healthComponent.alive && base.networkedBodyAttachment.attachedBody.teamComponent.teamIndex != TeamIndex.Player)
+                        {
+                            TeamManager.instance.GiveTeamMoney(TeamIndex.Player, goldReward);
+                        }
+                    }
+                    else if (ExplosionGivesMoney.Value && !base.networkedBodyAttachment.attachedBody)//if the body stops existing also give money
+                    {
+                        TeamManager.instance.GiveTeamMoney(TeamIndex.Player, goldReward);
+                    }
+                }
+            }
 
             //if the body still exists, remove the fuel array from it
             if (base.networkedBodyAttachment.attachedBody)
